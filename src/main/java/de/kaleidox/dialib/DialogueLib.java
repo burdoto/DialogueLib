@@ -1,6 +1,10 @@
 package de.kaleidox.dialib;
 
 import com.mojang.logging.LogUtils;
+import de.kaleidox.dialib.util.event.RegisterCommandEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,31 +17,49 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.comroid.api.Upgradeable;
+import org.comroid.api.io.FileHandle;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DialogueLib.MODID)
 @Mod.EventBusSubscriber(modid = DialogueLib.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DialogueLib {
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "dialib";
-
-    // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static DialogueLib INSTANCE; // lol
 
     public DialogueLib()
     {
-        // Register the setup method for modloading
+        INSTANCE = this;
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public static void onBlocksRegistration(final RegistryEvent.Register<Block> blockRegisterEvent) {
+    }
+
+    @SubscribeEvent
+    public static void onItemsRegistration(final RegistryEvent.Register<Item> itemRegisterEvent) {
+    }
+
+    @SubscribeEvent
+    public static void onCommonSetupEvent(FMLCommonSetupEvent event) {
+        MinecraftForge.EVENT_BUS.register(RegisterCommandEvent.class);
+    }
+
+    public FileHandle config(String name) {
+        return getMcDir()
+                .createSubDir("config")
+                .createSubFile(name);
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -80,5 +102,11 @@ public class DialogueLib {
             // Register a new block here
             LOGGER.info("HELLO from Register Block");
         }
+    }
+
+    public static FileHandle getMcDir()
+    {
+        //var server = MinecraftServer.getInstance(); if (server != null && server.isDedicatedServer()) return new File(".");
+        return new FileHandle(Minecraft.getInstance().gameDirectory);
     }
 }
