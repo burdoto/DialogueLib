@@ -1,0 +1,20 @@
+{
+  "repo": [
+    { "key": "glhf", "content": ["Have fun!"] }
+  ],
+  "content": ["Hello! Are you new to Minecraft?"],
+  "choices": {
+    "No": { "ref": "glhf" },
+    "Yes": {
+      "content": ["Do you need some help?"],
+      "choices": {
+        "No": { "ref": "glhf" },
+        "Yes": { "content": [
+          "Punching a tree gives you wood",
+          "Wood is required for crafting since Stone Age",
+          "Time to pick some upgrades!"
+        ]}
+      }
+    }
+  }
+}
