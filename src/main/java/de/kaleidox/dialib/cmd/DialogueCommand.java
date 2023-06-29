@@ -8,23 +8,34 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.world.entity.player.Player;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
+import static net.minecraft.commands.arguments.MessageArgument.message;
+
 public class DialogueCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("dialogue")
+        dispatcher.register(literal("dialogue")
                 .requires((src) -> src.hasPermission(1))
-                .then(Commands.literal("tutorial")
+                .then(literal("tutorial")
                         .executes(DialogueCommand::runTutorial))
-                .then(Commands.literal("start")
-                        .then(Commands.argument("name", MessageArgument.message())
+                .then(literal("start")
+                        .then(argument("name", message())
                                 .executes(DialogueCommand::runStart)))
+                .then(literal("continue")
+                        .then(argument("name", message())
+                                .then(argument("arg", message())
+                                        .executes(DialogueCommand::runContinue))))
         );
     }
 
     private static int runTutorial(CommandContext<CommandSourceStack> ctx) {
+        //ctx.getSource().getServer().getPlayerList().broadcastMessage(Component.nullToEmpty("hello world"), ChatType.CHAT, entity.getUUID());
+
         var player = getPlayer(ctx);
         DialogueBlob blob;
         try (InputStream data = ClassLoader.getSystemResourceAsStream("assets/dialogue/tutorial.json")) {
@@ -37,8 +48,6 @@ public class DialogueCommand {
     }
 
     private static int runStart(CommandContext<CommandSourceStack> ctx) {
-        //ctx.getSource().getServer().getPlayerList().broadcastMessage(Component.nullToEmpty("hello world"), ChatType.CHAT, entity.getUUID());
-
         var player = getPlayer(ctx);
         var name = ctx.getArgument("name", String.class);
         var dialogue = DialogueManager.getByName(name);
@@ -46,6 +55,16 @@ public class DialogueCommand {
         return 1;
     }
 
+    private static int runContinue(CommandContext<CommandSourceStack> commandSourceStackCommandContext) {
+        var player = getPlayer(ctx);
+        var name = ctx.getArgument("name", String.class);
+        var arg = ctx.getArgument("arg", String.class);
+        var dialogue = DialogueManager.getByName(name);
+        dialogue.next(player, arg);
+        return 1;
+    }
+
     private static Player getPlayer(CommandContext<CommandSourceStack> ctx) {
+        throw new NotImplementedException(); // todo
     }
 }
