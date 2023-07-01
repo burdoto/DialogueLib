@@ -1,0 +1,5 @@
+name: DialogueLib
+version: '${version}'
+main: com.ampznetwork.dialoguelib.DialogueLib
+api-version: '1.18'
+authors: [Kaleidox]
