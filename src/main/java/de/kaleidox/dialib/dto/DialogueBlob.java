@@ -1,5 +1,6 @@
 package de.kaleidox.dialib.dto;
 
+import de.kaleidox.dialib.DialogueManager;
 import lombok.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -23,17 +24,6 @@ public class DialogueBlob {
     public Map<String, DialogueBlob> choices;
     public transient @Nullable DialogueBlob parent;
 
-    public void start(Player player) {
-        var session = new Session(this);
-        session.exec(player);
-    }
-
-    private String choiceToString(Map.Entry<String, DialogueBlob> choice) {
-        return "[%s] %s".formatted(
-                choice.getKey(),
-                Objects.requireNonNullElseGet(choice.getValue().desc, choice::getKey));
-    }
-
     private DialogueBlob getChoice(final String key) {
         return choices.entrySet().stream()
                 .filter(e -> key.equals(e.getKey()))
@@ -50,9 +40,18 @@ public class DialogueBlob {
                 .or(() -> parent != null ? parent.fromRepo(key) : Optional.empty());
     }
 
+    @Deprecated // todo: use tellraw data instead
+    private static String choiceToString(Map.Entry<String, DialogueBlob> choice) {
+        return "[%s] %s".formatted(
+                choice.getKey(),
+                Objects.requireNonNullElseGet(choice.getValue().desc, choice::getKey));
+    }
+
     @Data
+    @AllArgsConstructor
     public static class Session {
         public final DialogueBlob root;
+        public final Player player;
         private DialogueBlob current;
 
         public void advance(String arg) {

@@ -4,11 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import de.kaleidox.dialib.DialogueManager;
 import de.kaleidox.dialib.dto.DialogueBlob;
+import lombok.SneakyThrows;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.world.entity.player.Player;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,10 +24,9 @@ public class DialogueCommand {
                 .then(literal("start")
                         .then(argument("name", message())
                                 .executes(DialogueCommand::runStart)))
-                .then(literal("continue")
-                        .then(argument("name", message())
-                                .then(argument("arg", message())
-                                        .executes(DialogueCommand::runContinue))))
+                .then(literal("pick")
+                        .then(argument("arg", message())
+                                .executes(DialogueCommand::runPick)))
         );
     }
 
@@ -43,28 +40,27 @@ public class DialogueCommand {
         } catch (IOException e) {
             throw new RuntimeException("Unable to read tutorial.json", e);
         }
-        blob.start(player);
+        DialogueManager.start(blob, player);
         return 1;
     }
 
     private static int runStart(CommandContext<CommandSourceStack> ctx) {
         var player = getPlayer(ctx);
         var name = ctx.getArgument("name", String.class);
-        var dialogue = DialogueManager.getByName(name);
-        dialogue.start(player);
+        var dialogue = DialogueManager.findByName(name).join();
+        DialogueManager.start(dialogue, player);
         return 1;
     }
 
-    private static int runContinue(CommandContext<CommandSourceStack> commandSourceStackCommandContext) {
+    private static int runPick(CommandContext<CommandSourceStack> ctx) {
         var player = getPlayer(ctx);
-        var name = ctx.getArgument("name", String.class);
         var arg = ctx.getArgument("arg", String.class);
-        var dialogue = DialogueManager.getByName(name);
-        dialogue.next(player, arg);
+        DialogueManager.next(player, arg);
         return 1;
     }
 
+    @SneakyThrows
     private static Player getPlayer(CommandContext<CommandSourceStack> ctx) {
-        throw new NotImplementedException(); // todo
+        return ctx.getSource().getPlayerOrException();
     }
 }
