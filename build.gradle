@@ -8,6 +8,10 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
     maven {
+        name = "comroid"
+        url = "https://maven.comroid.org"
+    }
+    maven {
         name = "spigotmc-repo"
         url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
