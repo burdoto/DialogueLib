@@ -1,24 +1,17 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        maven { url = 'https://maven.minecraftforge.net/' }
-    }
-}
-
 rootProject.name = 'DialogueLib'
 
-var dirApi = file('../api/')
+var dirApi = file('../../java/api/')
 if (dirApi.exists()) {
     include(':api')
     project(':api').projectDir = dirApi
 }
 
-var dirCmdr = file('../cmdr/')
+var dirCmdr = file('../../java/cmdr/')
 if (dirCmdr.exists()) {
     include(':cmdr')
     project(':cmdr').projectDir = dirCmdr
 }
-var dirCmdrSpigot = file('../cmdr/spigot/')
+var dirCmdrSpigot = file('../../java/cmdr/spigot/')
 if (dirCmdrSpigot.exists()) {
     include(':cmdr-spigot')
     project(':cmdr-spigot').projectDir = dirCmdrSpigot

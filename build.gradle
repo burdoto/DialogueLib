@@ -22,6 +22,11 @@ repositories {
 }
 
 dependencies {
+    for (String lib in new String[]{"api", "cmdr", "cmdr-spigot"})
+        if (findProject(':'+lib) != null)
+            implementation project(':'+lib)
+        else implementation 'org.comroid:'+lib+':+'
+
     compileOnly "org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT"
 }
 

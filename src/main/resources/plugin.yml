@@ -3,3 +3,7 @@ version: '${version}'
 main: com.ampznetwork.dialoguelib.DialogueLib
 api-version: '1.18'
 authors: [Kaleidox]
+commands:
+  dialogue:
+    permission: dialogue.use
+    usage: 'dialogue <start/continue/abort> <arg>'

@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DialogueLib.iml" filepath="$PROJECT_DIR$/.idea/modules/DialogueLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/628374591/DialogueLib.api.iml" filepath="$PROJECT_DIR$/.idea/modules/628374591/DialogueLib.api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/628374591/DialogueLib.api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/628374591/DialogueLib.api.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/628374591/DialogueLib.api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/628374591/DialogueLib.api.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/DialogueLib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/DialogueLib.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DialogueLib.test.iml" filepath="$PROJECT_DIR$/.idea/modules/DialogueLib.test.iml" />
     </modules>
   </component>
 </project>
